@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -x
+
+. ~/izBox/demoes/openstack/nova.rc
+
+cd ~/cloud_images/trusty
+glance image-create \
+--name "trusty x86_64" \
+--is-public True \
+--container-format bare \
+--disk-format qcow2 \
+--file trusty-server-cloudimg-amd64-disk1.img
+

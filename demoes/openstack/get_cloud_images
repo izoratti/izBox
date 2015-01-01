@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -x
+
+os_version='trusty'
+
+mkdir -pv ~/cloud_images/${os_version}
+
+cd ~/cloud_images/${os_version}
+wget http://cloud-images.ubuntu.com/${os_version}/current/${os_version}-server-cloudimg-amd64-disk1.img

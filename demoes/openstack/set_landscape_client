@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -x
+
+acct_name='canonical64'
+
+for server in  \
+	juju \
+	mysql \
+	rabbitmq \
+	keystone \
+	glance \
+	cinder \
+	controller \
+	compute01 \
+	compute02 \
+	horizon \
+	ceph02 \
+	ceph03 \
+	ceph01 \
+	neutron
+do
+	ssh ${server} 'sudo apt-get install -y landscape-client'
+	command_to_exec="ssh ${server} 'sudo landscape-config --silent --computer-title \"izBox - ${server}\" --account-name ${acct_name}'"
+	eval "${command_to_exec}"
+done
+

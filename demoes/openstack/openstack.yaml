@@ -1,0 +1,36 @@
+keystone:
+    openstack-origin: distro
+    admin-password: openstack
+
+glance:
+    openstack-origin: distro
+
+cinder:
+    openstack-origin: distro
+    block-device: None
+
+nova-cloud-controller:
+    openstack-origin: distro
+    network-manager: 'Neutron'
+    quantum-security-groups: "yes"
+
+nova-compute:
+    openstack-origin: distro
+
+quantum-gateway:
+    openstack-origin: distro
+    ext-port: 'eth1'
+    instance-mtu: 1400
+
+openstack-dashboard:
+    openstack-origin: distro
+
+ceph:
+    fsid: 65d349f2-8dda-11e4-be91-52540059084a
+    monitor-secret: AQDoy55U+Ng0MRAAdjDAAken7wpLOcB6Z5pltQ==
+    osd-devices: /dev/vdb
+
+ceph-radosgw:
+    source: distro
+
+

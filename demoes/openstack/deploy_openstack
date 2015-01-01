@@ -1,0 +1,67 @@
+#!/bin/bash
+
+os_version='trusty'
+
+cd ~/charms
+
+juju set-constraints tags=
+juju deploy --constraints tags=database local:${os_version}/mysql
+
+juju set-constraints tags=
+juju deploy --constraints tags=amqp local:${os_version}/rabbitmq-server
+
+juju set-constraints tags=
+juju deploy --constraints tags=keystone --config ~/izBox/demoes/openstack/openstack.yaml local:${os_version}/keystone
+
+juju set-constraints tags=
+juju deploy --constraints tags=glance --config ~/izBox/demoes/openstack/openstack.yaml local:${os_version}/glance
+
+juju set-constraints tags=
+juju deploy --constraints tags=cinder --config ~/izBox/demoes/openstack/openstack.yaml local:${os_version}/cinder
+
+juju set-constraints tags=
+juju deploy --constraints tags=controller --config ~/izBox/demoes/openstack/openstack.yaml local:${os_version}/nova-cloud-controller
+
+juju set-constraints tags=
+juju deploy --constraints tags=compute --config ~/izBox/demoes/openstack/openstack.yaml local:${os_version}/nova-compute -n 2
+
+juju set-constraints tags=
+juju deploy --constraints tags=neutron --config ~/izBox/demoes/openstack/openstack.yaml local:${os_version}/quantum-gateway
+
+juju set-constraints tags=
+juju deploy --constraints tags=dashboard --config ~/izBox/demoes/openstack/openstack.yaml local:${os_version}/openstack-dashboard
+
+juju set-constraints tags=
+juju deploy --constraints tags=ceph --config ~/izBox/demoes/openstack/openstack.yaml local:${os_version}/ceph -n 3
+
+juju set-constraints tags=
+juju deploy --constraints tags=radosgw --config ~/izBox/demoes/openstack/openstack.yaml local:${os_version}/ceph-radosgw
+
+juju add-relation keystone mysql
+juju add-relation nova-cloud-controller mysql
+juju add-relation nova-cloud-controller rabbitmq-server
+juju add-relation nova-cloud-controller glance
+juju add-relation nova-cloud-controller keystone
+juju add-relation nova-compute:shared-db mysql
+juju add-relation nova-compute:amqp rabbitmq-server:amqp
+juju add-relation nova-compute glance
+juju add-relation nova-compute nova-cloud-controller
+juju add-relation nova-compute ceph
+juju add-relation glance mysql
+juju add-relation glance keystone
+juju add-relation glance ceph
+juju add-relation openstack-dashboard keystone
+juju add-relation cinder keystone
+juju add-relation cinder mysql
+juju add-relation cinder rabbitmq-server
+juju add-relation cinder nova-cloud-controller
+juju add-relation cinder ceph
+juju add-relation cinder glance
+juju add-relation quantum-gateway mysql
+juju add-relation quantum-gateway nova-cloud-controller
+juju add-relation quantum-gateway:amqp rabbitmq-server:amqp
+juju add-relation ceph ceph-radosgw
+juju add-relation ceph-radosgw keystone
+
+juju expose openstack-dashboard
+

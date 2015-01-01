@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -x
+
+charm_version="trusty"
+mkdir -pv ~/charms/${charm_version}/
+
+cd ~/charms/${charm_version}/
+      for charm_to_get in \
+         juju-gui \
+         ceph \
+         ceph-radosgw \
+         cinder \
+         glance \
+         keystone \
+         landscape-client \
+         mysql \
+         nova-cloud-controller \
+         nova-compute \
+         openstack-dashboard \
+         quantum-gateway \
+         rabbitmq-server
+do
+charm-get ${charm_version}/${charm_to_get}
+done
+

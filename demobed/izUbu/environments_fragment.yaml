@@ -1,0 +1,25 @@
+default: maas
+
+#...
+
+    maas:
+        type: maas
+
+        # maas-server specifies the location of the MAAS server. It must
+        # specify the base path.
+        #
+        maas-server: 'http://192.168.0.54/MAAS/'
+
+        # maas-oauth holds the OAuth credentials from MAAS.
+        #
+        maas-oauth: 'DgHsHa3Y6C3BmYnrtU:Svkzb8jsxQKzUZUTC9:mwLqhPx22PRSrSeuVdttRBYG4V4AF62p'
+
+        # maas-server bootstrap ssh connection options
+        #
+        authorized-keys-path: ~/.ssh/id_rsa.pub
+        admin-secret: admin
+        default-series: trusty
+
+        # bootstrap-timeout time to wait contacting a state server, in seconds.
+        bootstrap-timeout: 1800
+

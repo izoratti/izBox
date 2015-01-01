@@ -1,0 +1,234 @@
+#!/bin/bash
+
+cd /home/kvm
+
+
+#
+# 00 - Landscape node
+#
+qemu-img create -f qcow2 /home/kvm/storage/00_Landscape-141223.qcow2 32G
+
+virt-install --noautoconsole --pxe --boot network,hd,menu=on \
+--name 00_Landscape-141223 \
+--ram 512 \
+--vcpus 1 \
+--graphics vnc \
+--disk path=/home/kvm/storage/00_Landscape-141223.qcow2 \
+--network network=KVMHost1,model=virtio
+
+
+#
+# 01 - Bootstrap node
+#
+qemu-img create -f qcow2 /home/kvm/storage/01_bootstrap-141223.qcow2 16G
+
+virt-install --noautoconsole --pxe --boot network,hd,menu=on \
+--name 01_bootstrap-141223 \
+--ram 512 \
+--vcpus 1 \
+--graphics vnc \
+--disk path=/home/kvm/storage/01_bootstrap-141223.qcow2 \
+--network network=KVMHost1,model=virtio
+
+
+#
+# 02 - MySQL node
+#
+qemu-img create -f qcow2 /home/kvm/storage/02_MySQL-141223.qcow2 8G
+
+virt-install --noautoconsole --pxe --boot network,hd,menu=on \
+--name 02_MySQL-141223 \
+--ram 512 \
+--vcpus 1 \
+--graphics vnc \
+--disk path=/home/kvm/storage/02_MySQL-141223.qcow2 \
+--network network=KVMHost1,model=virtio
+
+
+#
+# 03 - RabbitMQ
+#
+qemu-img create -f qcow2 /home/kvm/storage/03_RabbitMQ-141223.qcow2 8G
+
+virt-install --noautoconsole --pxe --boot network,hd,menu=on \
+--name 03_RabbitMQ-141223 \
+--ram 512 \
+--vcpus 1 \
+--graphics vnc \
+--disk path=/home/kvm/storage/03_RabbitMQ-141223.qcow2 \
+--network network=KVMHost1,model=virtio
+
+
+#
+# 04 - Keystone
+#
+qemu-img create -f qcow2 /home/kvm/storage/04_Keystone-141223.qcow2 16G
+
+virt-install --noautoconsole --pxe --boot network,hd,menu=on \
+--name 04_Keystone-141223 \
+--ram 512 \
+--vcpus 1 \
+--graphics vnc \
+--disk path=/home/kvm/storage/04_Keystone-141223.qcow2 \
+--network network=KVMHost1,model=virtio
+
+
+#
+# 05 - Horizon
+#
+qemu-img create -f qcow2 /home/kvm/storage/05_Horizon-141223.qcow2 16G
+
+virt-install --noautoconsole --pxe --boot network,hd,menu=on \
+--name 05_Horizon-141223 \
+--ram 512 \
+--vcpus 1 \
+--graphics vnc \
+--disk path=/home/kvm/storage/05_Horizon-141223.qcow2 \
+--network network=KVMHost1,model=virtio
+
+
+#
+# 06 - Controller
+#
+qemu-img create -f qcow2 /home/kvm/storage/06_Controller-141223.qcow2 8G
+
+virt-install --noautoconsole --pxe --boot network,hd,menu=on \
+--name 06_Controller-141223 \
+--ram 512 \
+--vcpus 1 \
+--graphics vnc \
+--disk path=/home/kvm/storage/06_Controller-141223.qcow2 \
+--network network=KVMHost1,model=virtio
+
+
+#
+# 07 - Glance
+#
+qemu-img create -f qcow2 /home/kvm/storage/07_Glance-141223.qcow2 8G
+
+virt-install --noautoconsole --pxe --boot network,hd,menu=on \
+--name 07_Glance-141223 \
+--ram 512 \
+--vcpus 1 \
+--graphics vnc \
+--disk path=/home/kvm/storage/07_Glance-141223.qcow2 \
+--network network=KVMHost1,model=virtio
+
+
+#
+# 08 - Cinder
+#
+qemu-img create -f qcow2 /home/kvm/storage/08_Cinder-141223.qcow2 8G
+
+virt-install --noautoconsole --pxe --boot network,hd,menu=on \
+--name 08_Cinder-141223 \
+--ram 512 \
+--vcpus 1 \
+--graphics vnc \
+--disk path=/home/kvm/storage/08_Cinder-141223.qcow2 \
+--network network=KVMHost1,model=virtio
+
+
+#
+# 09 - RadosGW
+#
+qemu-img create -f qcow2 /home/kvm/storage/09_RadosGW-141223.qcow2 8G
+
+virt-install --noautoconsole --pxe --boot network,hd,menu=on \
+--name 09_RadosGW-141223 \
+--ram 512 \
+--vcpus 1 \
+--graphics vnc \
+--disk path=/home/kvm/storage/09_RadosGW-141223.qcow2 \
+--network network=KVMHost1,model=virtio
+
+
+#
+# 10 - Neutron
+#
+qemu-img create -f qcow2 /home/kvm/storage/10_Neutron-141223.qcow2 8G
+
+virt-install --noautoconsole --pxe --boot network,hd,menu=on \
+--name 10_Neutron-141223 \
+--ram 512 \
+--vcpus 1 \
+--graphics vnc \
+--disk path=/home/kvm/storage/10_Neutron-141223.qcow2 \
+--network network=KVMHost1,model=virtio \
+--network network=KVMHost1,model=virtio
+
+
+#
+# 11 - Compute01
+#
+qemu-img create -f qcow2 /home/kvm/storage/11_Compute01-141223.qcow2 8G
+
+virt-install --noautoconsole --pxe --boot network,hd,menu=on \
+--name 11_Compute01-141223 \
+--ram 2048 \
+--vcpus 4 \
+--graphics vnc \
+--disk path=/home/kvm/storage/11_Compute01-141223.qcow2 \
+--network network=KVMHost1,model=virtio
+
+
+#
+# 12 - Compute02
+#
+qemu-img create -f qcow2 /home/kvm/storage/12_Compute02-141223.qcow2 8G
+
+virt-install --noautoconsole --pxe --boot network,hd,menu=on \
+--name 12_Compute02-141223 \
+--ram 2048 \
+--vcpus 4 \
+--graphics vnc \
+--disk path=/home/kvm/storage/12_Compute02-141223.qcow2 \
+--network network=KVMHost1,model=virtio
+
+
+#
+# 21 - Cheph01
+#
+qemu-img create -f qcow2 /home/kvm/storage/21_Ceph01d1-141223.qcow2 48G
+qemu-img create -f qcow2 /home/kvm/storage/21_Ceph01d2-141223.qcow2 48G
+
+virt-install --noautoconsole --pxe --boot network,hd,menu=on \
+--name 21_Ceph01-141223 \
+--ram 512 \
+--vcpus 1 \
+--graphics vnc \
+--disk path=/home/kvm/storage/21_Ceph01d1-141223.qcow2 \
+--disk path=/home/kvm/storage/21_Ceph01d2-141223.qcow2 \
+--network network=KVMHost1,model=virtio
+
+
+#
+# 22 - Cheph02
+#
+qemu-img create -f qcow2 /home/kvm/storage/22_Ceph02d1-141223.qcow2 48G
+qemu-img create -f qcow2 /home/kvm/storage/22_Ceph02d2-141223.qcow2 48G
+
+virt-install --noautoconsole --pxe --boot network,hd,menu=on \
+--name 22_Ceph02-141223 \
+--ram 512 \
+--vcpus 1 \
+--graphics vnc \
+--disk path=/home/kvm/storage/22_Ceph02d1-141223.qcow2 \
+--disk path=/home/kvm/storage/22_Ceph02d2-141223.qcow2 \
+--network network=KVMHost1,model=virtio
+
+
+#
+# 23 - Cheph03
+#
+qemu-img create -f qcow2 /home/kvm/storage/23_Ceph03d1-141223.qcow2 48G
+qemu-img create -f qcow2 /home/kvm/storage/23_Ceph03d2-141223.qcow2 48G
+
+virt-install --noautoconsole --pxe --boot network,hd,menu=on \
+--name 23_Ceph03-141223 \
+--ram 512 \
+--vcpus 1 \
+--graphics vnc \
+--disk path=/home/kvm/storage/23_Ceph03d1-141223.qcow2 \
+--disk path=/home/kvm/storage/23_Ceph03d2-141223.qcow2 \
+--network network=KVMHost1,model=virtio

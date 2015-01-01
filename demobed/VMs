@@ -1,0 +1,20 @@
+#
+# This file is used to create new VMs
+# The first version is based on the creation and setting of VMs in VirtualBox and MAAS 1.7
+#
+# Lines starting with # are skipped
+# Lines contain:
+#
+# VM Type - Types are:
+#		- VBox
+#		- KVM
+# VM Address - Examples are:
+#		- izoratti@192.168.56.1 it will be used to connect via SSH to the VirtualBox console or via virsh to qemu+ssh://izoratti@192.168.56.1/system
+# Machine Name - Such as 02_Compute etc.
+# CPUs - Number of vCPUs
+# RAM - Amount of RAM in MBytes
+# Disk - Size of the disk in GBytes
+# Net 1 - Name of the first network. The script prepares the NIC according to the type of network,
+#		  i.e. by setting the adequate parameters, for Host-only, Bridge, NAT etc.
+# Net 2 - Name of the second network
+#

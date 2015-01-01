@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -x
+
+admin_token=`ssh keystone 'sudo grep admin_token /etc/keystone/keystone.conf' | awk '{ print $3 }'`
+
+echo "export SERVICE_ENDPOINT=http://keystone:35357/v2.0/" > ~/izBox/demoes/openstack/nova.rc
+echo "export SERVICE_TOKEN=${admin_token}" >> ~/izBox/demoes/openstack/nova.rc
+echo "export OS_AUTH_URL=http://keystone:35357/v2.0/" >> ~/izBox/demoes/openstack/nova.rc
+echo "export OS_USERNAME=admin" >> ~/izBox/demoes/openstack/nova.rc
+echo "export OS_PASSWORD=openstack" >> ~/izBox/demoes/openstack/nova.rc
+echo "export OS_TENANT_NAME=admin" >> ~/izBox/demoes/openstack/nova.rc
+
+# Copy the file to all the VMs
+scp ~/izBox/demoes/openstack/nova.rc keystone:.
+scp ~/izBox/demoes/openstack/nova.rc glance:.
+scp ~/izBox/demoes/openstack/nova.rc cinder:.
+scp ~/izBox/demoes/openstack/nova.rc controller:.
+scp ~/izBox/demoes/openstack/nova.rc compute01:.
+scp ~/izBox/demoes/openstack/nova.rc compute02:.
+scp ~/izBox/demoes/openstack/nova.rc horizon:.
+scp ~/izBox/demoes/openstack/nova.rc neutron:.
+scp ~/izBox/demoes/openstack/nova.rc ceph01:.
+scp ~/izBox/demoes/openstack/nova.rc ceph02:.
+scp ~/izBox/demoes/openstack/nova.rc ceph03:.
+
+exit 0
+

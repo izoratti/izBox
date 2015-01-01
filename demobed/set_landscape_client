@@ -1,0 +1,6 @@
+#!/bin/bash
+
+acct_name='canonical64'
+
+sudo apt-get install -y landscape-client
+sudo landscape-config --silent --computer-title "izBox - MAAS" --account-name ${acct_name}
