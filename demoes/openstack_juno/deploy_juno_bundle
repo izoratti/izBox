@@ -1,0 +1,10 @@
+#!/bin/bash
+
+
+set -ex
+
+JUJU_REPOSITORY=
+juju set-constraints tags=
+juju-deployer -r 3 -c juno_bundle.yaml
+
+echo "Deployment finished"

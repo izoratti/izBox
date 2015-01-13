@@ -1,3 +1,0 @@
-#!/bin/bash
-
-maas login maas http://localhost/MAAS - < ~/izBox/demobed/maas-apikey

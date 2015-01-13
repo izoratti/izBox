@@ -20,8 +20,7 @@
 
 #
 # @set_dns_upstream - This program checks the current DNS for this server
-#                     and changes the configuration on the MAAS server.
-#                     This script is used in /etc/rc.local at startup.
+#                     and changes the configuration on the MAAS server
 #
 # @verbatim
 # Revision History
@@ -45,3 +44,4 @@ chown maas:maas /home/maas/izBox/dns_upstream_address
 /usr/bin/maas maas maas set-config name=upstream_dns value="${dns_ups}"
 
 exit 0
+

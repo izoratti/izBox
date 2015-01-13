@@ -1,0 +1,136 @@
+#!/bin/bash
+
+# Adding Machines
+
+juju add-machine node0vm1.maas	# Neutron
+juju add-machine node0vm2.maas	# Keystone
+juju add-machine node1		# Nova Controller, Cinder and Glance
+juju add-machine node2		# MySQL and RabbitMQ
+juju add-machine node3		# Horizon, Mongo, Heat, Ceilometer
+juju add-machine node4
+juju add-machine node5
+juju add-machine node6
+juju add-machine node7		# Check and Nova
+juju add-machine node8		# Check and Nova
+juju add-machine node9		# Check and Nova
+
+
+#
+# Deploy services
+#
+
+# Ceph
+juju deploy --constraints tags=ceph --config juno_conf.yaml trusty/ceph -n 3
+
+# Keystone
+juju deploy --constraints tags=keystone --config juno_conf.yaml trusty/keystone
+
+# Nova
+juju deploy --to 1 --config juno_conf.yaml cs:trusty/nova-compute
+juju add-unit --to 2 nova-compute
+juju add-unit --to 3 nova-compute
+
+# Neutron
+juju deploy --constraints tags=neutron --config juno_conf.yaml trusty/quantum-gateway
+
+# Nova Cloud Controller, Cinder, Glance
+juju deploy --constraints tags=controller --config juno_conf.yaml trusty/nova-cloud-controller
+
+# RabbitMQ
+juju deploy --constraints tags=rabbitmq trusty/rabbitmq-server
+
+# Glance
+juju deploy --to 15 trusty/glance
+
+# Cinder
+juju deploy --to 15 --config juno_conf.yaml trusty/cinder
+
+# RadosGW
+juju deploy --to 15 trusty/ceph-radosgw
+
+# Horizon
+juju deploy --constraints tags=dashboard --config juno_conf.yaml trusty/openstack-dashboard
+
+# MySQL
+juju deploy --to 9 --config juno_conf.yaml trusty/mysql
+
+# MongoDB
+juju deploy --to 10 trusty/mongodb
+
+# Ceilometer
+juju deploy --to 10 trusty/ceilometer
+
+# Heat
+juju deploy --to 10 trusty/heat
+
+# Relations
+juju add-relation keystone:shared-db mysql:shared-db
+juju add-relation nova-cloud-controller:shared-db mysql:shared-db
+juju add-relation nova-cloud-controller:amqp rabbitmq-server:amqp
+juju add-relation nova-cloud-controller:image-service glance:image-service
+juju add-relation nova-cloud-controller:identity-service keystone:identity-service
+juju add-relation glance:shared-db mysql:shared-db
+juju add-relation glance:identity-service keystone:identity-service
+juju add-relation cinder:shared-db mysql:shared-db
+juju add-relation cinder:amqp rabbitmq-server:amqp
+juju add-relation cinder:cinder-volume-service nova-cloud-controller:cinder-volume-service
+juju add-relation cinder:identity-service keystone:identity-service
+juju add-relation quantum-gateway:shared-db mysql:shared-db
+juju add-relation quantum-gateway:amqp rabbitmq-server:amqp
+
+juju add-relation quantum-gateway:quantum-network-service nova-cloud-controller:quantum-network-service
+juju add-relation openstack-dashboard:identity-service keystone:identity-service
+juju add-relation nova-compute:shared-db mysql:shared-db
+juju add-relation nova-compute:amqp rabbitmq-server:amqp
+juju add-relation nova-compute:image-service glance:image-service
+juju add-relation nova-compute:cloud-compute nova-cloud-controller:cloud-compute
+juju add-relation ceph:client nova-compute:ceph
+juju add-relation ceph:client glance:ceph
+juju add-relation ceilometer:identity-service keystone:identity-service
+juju add-relation ceilometer:amqp rabbitmq-server:amqp
+juju add-relation ceilometer:shared-db mongodb:database
+juju add-relation heat:shared-db mysql:shared-db
+juju add-relation heat:identity-service keystone:identity-service
+juju add-relation heat:amqp rabbitmq-server:amqp
+juju add-relation ceph-radosgw:mon ceph:radosgw
+juju add-relation ceph-radosgw:identity-service keystone:identity-service
+
+exit 0
+
+juju add-relation cinder:storage-backend cinder-ceph:storage-backend
+juju add-relation ceph:client cinder-ceph:ceph
+juju add-relation ceilometer-agent:container nova-compute:juju-info
+juju add-relation ceilometer-agent:ceilometer-service ceilometer:ceilometer-service
+    - - "ntp:juju-info"
+      - "neutron-gateway:juju-info"
+    - - "ntp:juju-info"
+      - "ceph:juju-info"
+    - - "ntp:juju-info"
+      - "keystone:juju-info"
+    - - "ntp:juju-info"
+      - "nova-compute:juju-info"
+    - - "ntp:juju-info"
+      - "nova-cloud-controller:juju-info"
+    - - "ntp:juju-info"
+      - "rabbitmq:juju-info"
+    - - "ntp:juju-info"
+      - "glance:juju-info"
+    - - "ntp:juju-info"
+      - "cinder:juju-info"
+    - - "ntp:juju-info"
+      - "ceph-radosgw:juju-info"
+    - - "ntp:juju-info"
+      - "openstack-dashboard:juju-info"
+    - - "ntp:juju-info"
+      - "mysql:juju-info"
+    - - "ntp:juju-info"
+      - "mongodb:juju-info"
+    - - "ntp:juju-info"
+      - "ceilometer:juju-info"
+    - - "ntp:juju-info"
+      - "heat:juju-info"
+
+
+
+
+

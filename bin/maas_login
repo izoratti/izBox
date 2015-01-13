@@ -1,0 +1,3 @@
+#!/bin/bash
+
+/usr/bin/maas login maas http://localhost/MAAS `cat ~/izBox/maas-api-key`

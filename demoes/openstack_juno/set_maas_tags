@@ -1,0 +1,128 @@
+#!/bin/bash
+
+#set -x
+
+# Login
+/usr/bin/maas login maas http://localhost/MAAS `cat ~/izBox/maas-api-key`
+
+# 01 - bootstrap
+maas maas tag delete bootstrap
+maas maas tags new name=bootstrap
+system_id=`maas maas nodes list hostname="node0vm0.maas" | grep system_id | cut -d \" -f 4`
+maas maas tag update-nodes bootstrap add=${system_id}
+
+# 02 - mysql-rabbitmq
+system_id=`maas maas nodes list hostname=node2 | grep system_id | cut -d \" -f 4`
+maas maas tag delete mysql
+maas maas tags new name=mysql
+maas maas tag update-nodes mysql add=${system_id}
+
+maas maas tag delete rabbitmq
+maas maas tags new name=rabbitmq
+maas maas tag update-nodes rabbitmq add=${system_id}
+
+maas maas tag delete ntp
+maas maas tags new name=ntp
+maas maas tag update-nodes ntp add=${system_id}
+
+# 03 - mongo
+system_id=`maas maas nodes list hostname=node3 | grep system_id | cut -d \" -f 4`
+maas maas tag delete mongo
+maas maas tags new name=mongo
+maas maas tag update-nodes mongo add=${system_id}
+
+maas maas tag delete ceilometer
+maas maas tags new name=ceilometer
+maas maas tag update-nodes ceilometer add=${system_id}
+
+maas maas tag delete heat
+maas maas tags new name=heat
+maas maas tag update-nodes heat add=${system_id}
+
+maas maas tag delete dashboard
+maas maas tags new name=dashboard
+maas maas tag update-nodes dashboard add=${system_id}
+
+# 04 - keystone
+maas maas tag delete keystone
+maas maas tags new name=keystone
+system_id=`maas maas nodes list hostname="node0vm2.maas" | grep system_id | cut -d \" -f 4`
+maas maas tag update-nodes keystone add=${system_id}
+
+# 01 - controller
+system_id=`maas maas nodes list hostname=node1 | grep system_id | cut -d \" -f 4`
+
+maas maas tag delete controller
+maas maas tags new name=controller
+maas maas tag update-nodes controller add=${system_id}
+
+maas maas tag delete glance
+maas maas tags new name=glance
+maas maas tag update-nodes glance add=${system_id}
+
+maas maas tag delete cinder
+maas maas tags new name=cinder
+maas maas tag update-nodes cinder add=${system_id}
+
+maas maas tag delete radosgw
+maas maas tags new name=radosgw
+maas maas tag update-nodes radosgw add=${system_id}
+
+# 06 - neutron
+maas maas tag delete neutron
+maas maas tags new name=neutron
+system_id=`maas maas nodes list hostname="node0vm1.maas" | grep system_id | cut -d \" -f 4`
+maas maas tag update-nodes neutron add=${system_id}
+
+# 07-09 - compute-ceph
+maas maas tag delete ceph
+maas maas tags new name=ceph
+
+system_id=`maas maas nodes list hostname=node7 | grep system_id | cut -d \" -f 4`
+maas maas tag update-nodes ceph add=${system_id}
+system_id=`maas maas nodes list hostname=node8 | grep system_id | cut -d \" -f 4`
+maas maas tag update-nodes ceph add=${system_id}
+system_id=`maas maas nodes list hostname=node9 | grep system_id | cut -d \" -f 4`
+maas maas tag update-nodes ceph add=${system_id}
+
+maas maas tag delete compute
+maas maas tags new name=compute
+
+system_id=`maas maas nodes list hostname=node7 | grep system_id | cut -d \" -f 4`
+maas maas tag update-nodes compute add=${system_id}
+system_id=`maas maas nodes list hostname=node8 | grep system_id | cut -d \" -f 4`
+maas maas tag update-nodes compute add=${system_id}
+system_id=`maas maas nodes list hostname=node9 | grep system_id | cut -d \" -f 4`
+maas maas tag update-nodes compute add=${system_id}
+
+
+exit 0
+
+
+
+
+# 05 - ceilometer-agent
+maas maas tag delete ceilometer-agent
+maas maas tags new name=ceilometer-agent
+system_id=`maas maas nodes list hostname=ceilometer-agent | grep system_id | cut -d \" -f 4`
+maas maas tag update-nodes ceilometer-agent add=${system_id}
+
+# 08 - cinder-ceph
+maas maas tag delete cinder-ceph
+maas maas tags new name=cinder-ceph
+system_id=`maas maas nodes list hostname=cinder-ceph | grep system_id | cut -d \" -f 4`
+maas maas tag update-nodes cinder-ceph add=${system_id}
+
+# 10 - neutrongw
+maas maas tag delete neutrongw
+maas maas tags new name=neutrongw
+system_id=`maas maas nodes list hostname=neutrongw | grep system_id | cut -d \" -f 4`
+maas maas tag update-nodes neutrongw add=${system_id}
+
+# 20 - ceph-radosgw
+maas maas tag delete ceph-radosgw
+maas maas tags new name=ceph-radosgw
+system_id=`maas maas nodes list hostname=ceph-radosgw | grep system_id | cut -d \" -f 4`
+maas maas tag update-nodes ceph-radosgw add=${system_id}
+
+exit 0

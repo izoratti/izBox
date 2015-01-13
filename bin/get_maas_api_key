@@ -19,7 +19,7 @@
 #
 
 #
-# @get_maas_api_key - This program retrieves the MAAS API key 
+# @get_maas_api_key - This program retrieves the MAAS API key
 #                     and stores it in a text file
 #
 # @verbatim

@@ -1,0 +1,191 @@
+envExport: 
+  services: 
+    ceph: 
+      charm: "cs:trusty/ceph-31"
+      num_units: 3
+      options: 
+        fsid: "9e7aac42-4bf4-11e3-b4b7-5254006a039c"
+        "monitor-secret": AQAAvoJSOAv/NRAAgvXP8d7iXN7lWYbvDZzm2Q==
+        "osd-devices": /srv
+        "osd-reformat": "yes"
+      constraints: tags=ceph
+      annotations: 
+        "gui-x": "1336.5"
+        "gui-y": "543.5"
+      to: 
+        - "nova-compute=0"
+        - "nova-compute=1"
+        - "nova-compute=2"
+    "nova-compute": 
+      charm: "cs:trusty/nova-compute-11"
+      num_units: 3
+      options: 
+        "flat-interface": eth0
+      annotations: 
+        "gui-x": "1731.5"
+        "gui-y": "638.5"
+    keystone: 
+      charm: "cs:trusty/keystone-9"
+      num_units: 1
+      options: 
+        "admin-password": admin
+        "admin-token": admin
+      constraints: tags=keystone
+      annotations: 
+        "gui-x": "1394"
+        "gui-y": "1026"
+    "quantum-gateway": 
+      charm: "cs:trusty/quantum-gateway-7"
+      num_units: 1
+      options: 
+        "ext-port": eth1
+        "instance-mtu": 1400
+      constraints: tags=neutron
+      annotations: 
+        "gui-x": "1804.833251953125"
+        "gui-y": "271.8333435058594"
+    "rabbitmq-server": 
+      charm: "cs:trusty/rabbitmq-server-22"
+      num_units: 1
+      constraints: tags=rabbitmq
+      annotations: 
+        "gui-x": "2076.5"
+        "gui-y": "656"
+    "nova-cloud-controller": 
+      charm: "cs:trusty/nova-cloud-controller-50"
+      num_units: 1
+      options: 
+        "network-manager": Neutron
+      constraints: tags=controller
+      annotations: 
+        "gui-x": "3261.5"
+        "gui-y": "758.5"
+    glance: 
+      charm: "cs:trusty/glance-9"
+      num_units: 1
+      annotations: 
+        "gui-x": "2936.5"
+        "gui-y": "1213.5"
+      to: 
+        - "nova-cloud-controller=0"
+    cinder: 
+      charm: "cs:trusty/cinder-10"
+      num_units: 1
+      options: 
+        "block-device": none
+      annotations: 
+        "gui-x": "2331.5"
+        "gui-y": "1191"
+      to: 
+        - "nova-cloud-controller=0"
+    "ceph-radosgw": 
+      charm: "cs:trusty/ceph-radosgw-8"
+      num_units: 1
+      annotations: 
+        "gui-x": "1014.0001220703125"
+        "gui-y": "419.3333435058594"
+      to: 
+        - "nova-cloud-controller=0"
+    "openstack-dashboard": 
+      charm: "cs:trusty/openstack-dashboard-8"
+      num_units: 1
+      options: 
+        webroot: /
+      constraints: tags=dashboard
+      annotations: 
+        "gui-x": "1166.5"
+        "gui-y": "813.4999389648438"
+    mysql: 
+      charm: "cs:trusty/mysql-14"
+      num_units: 1
+      options: 
+        "dataset-size": "20%"
+      annotations: 
+        "gui-x": "2719.83349609375"
+        "gui-y": "373.49993896484375"
+      to: 
+        - "rabbitmq-server=0"
+    mongodb: 
+      charm: "cs:trusty/mongodb-13"
+      num_units: 1
+      annotations: 
+        "gui-x": "1079.833251953125"
+        "gui-y": "1183.4999694824219"
+      to: 
+        - "openstack-dashboard=0"
+    ceilometer: 
+      charm: "cs:trusty/ceilometer-2"
+      num_units: 1
+      annotations: 
+        "gui-x": "1266.5001220703125"
+        "gui-y": "1503.5"
+      to: 
+        - "openstack-dashboard=0"
+    heat: 
+      charm: "cs:trusty/heat-3"
+      num_units: 1
+      annotations: 
+        "gui-x": "1779.8333740234375"
+        "gui-y": "1533.4998779296875"
+      to: 
+        - "openstack-dashboard=0"
+  relations: 
+    - - "keystone:shared-db"
+      - "mysql:shared-db"
+    - - "nova-cloud-controller:shared-db"
+      - "mysql:shared-db"
+    - - "nova-cloud-controller:image-service"
+      - "glance:image-service"
+    - - "nova-cloud-controller:identity-service"
+      - "keystone:identity-service"
+    - - "glance:shared-db"
+      - "mysql:shared-db"
+    - - "glance:identity-service"
+      - "keystone:identity-service"
+    - - "cinder:shared-db"
+      - "mysql:shared-db"
+    - - "cinder:cinder-volume-service"
+      - "nova-cloud-controller:cinder-volume-service"
+    - - "cinder:identity-service"
+      - "keystone:identity-service"
+    - - "quantum-gateway:shared-db"
+      - "mysql:shared-db"
+    - - "quantum-gateway:amqp"
+      - "rabbitmq-server:amqp"
+    - - "cinder:amqp"
+      - "rabbitmq-server:amqp"
+    - - "nova-cloud-controller:amqp"
+      - "rabbitmq-server:amqp"
+    - - "quantum-gateway:quantum-network-service"
+      - "nova-cloud-controller:quantum-network-service"
+    - - "openstack-dashboard:identity-service"
+      - "keystone:identity-service"
+    - - "nova-compute:shared-db"
+      - "mysql:shared-db"
+    - - "nova-compute:amqp"
+      - "rabbitmq-server:amqp"
+    - - "nova-compute:image-service"
+      - "glance:image-service"
+    - - "nova-compute:cloud-compute"
+      - "nova-cloud-controller:cloud-compute"
+    - - "ceph:client"
+      - "nova-compute:ceph"
+    - - "ceph:client"
+      - "glance:ceph"
+    - - "ceilometer:identity-service"
+      - "keystone:identity-service"
+    - - "ceilometer:amqp"
+      - "rabbitmq-server:amqp"
+    - - "ceilometer:shared-db"
+      - "mongodb:database"
+    - - "heat:shared-db"
+      - "mysql:shared-db"
+    - - "heat:identity-service"
+      - "keystone:identity-service"
+    - - "heat:amqp"
+      - "rabbitmq-server:amqp"
+    - - "ceph-radosgw:mon"
+      - "ceph:radosgw"
+    - - "ceph-radosgw:identity-service"
+      - "keystone:identity-service"
+  series: trusty
